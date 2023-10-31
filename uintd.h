@@ -5,9 +5,9 @@ typedef struct uintd
 {
     unsigned int size;
     unsigned int capacity;
+    unsigned int *value;
     unsigned int num_digits;
     unsigned int str_cap;
-    unsigned int *value;
     char *str;
 } uintd;
 
