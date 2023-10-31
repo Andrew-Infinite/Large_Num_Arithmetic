@@ -14,6 +14,7 @@ int ft_strlen(char *str)
 
 void ft_atoi_sp(uintd *output, char *str)
 {
+	//make sure str string is only number.
 	int size = ft_strlen(str);
 	output->num_digits = size;
 	if(size <= 0)
@@ -21,19 +22,25 @@ void ft_atoi_sp(uintd *output, char *str)
 
 	int size_output = size / MAX_UINT_DIGIT + (size % MAX_UINT_DIGIT != 0) * 1;
 
-	if(output->capacity < size_output)
+	if(output->capacity < size_output || output->value == 0)
 	{
+		if(output->capacity > 0)
+			free(output->value);
 		output->value = (unsigned int *) malloc (size_output * sizeof(unsigned int));
+		if (output->value == 0)
+		{
+			output->size = 0;
+			output->capacity = 0;
+			return;
+		}
 		output->capacity = size_output;
 	}
+
 	output->size = size_output;
 	unsigned int i = size_output;
 	unsigned int j;
 	int limit;
 
-	if (output->value == 0)
-		return;
-	
 	while(*str && --i >= 0)
 	{
 		j = -1;
@@ -85,11 +92,15 @@ void ft_itoa_sp(uintd *output)
 	for(int i = 0; i < output->size; i++)
 	{
 		j = 0;
+		//least significant number first
+		//eg. num = 5648, output->str: 8 -> 48 -> 648 -> 5648 
 		for(unsigned int num = output->value[i]; num > 0; num/=10)
 		{
 			output->str[--size_output] = (num % 10) + '0';
 			j++;
 		}
+		//fill_zero
+		//eg. Max_UINT_DIGIT = 3, output->str: 1|001|020|000|101 instead of 1|1|20|0|101
 		while(size_output > 0 && j < MAX_UINT_DIGIT)
 		{
 			output->str[--size_output] = '0';
@@ -158,21 +169,6 @@ void destructor(uintd *data)
 	data->str = 0;
 }
 
-void init_uintd_func(uintd_func *func)
-{
-    if(sizeof(unsigned long long) * 0.5 < sizeof(unsigned int))
-		MAX_UINT_DIGIT = (unsigned int)(sizeof(unsigned long long)*8*0.3*0.5);
-	else
-		MAX_UINT_DIGIT = (unsigned int)(sizeof(unsigned int)*8*0.3);
-	MAX_UINT_LIMIT = ft_recursive_power(10,MAX_UINT_DIGIT);
-
-    func->atoi_sp = &ft_atoi_sp;
-    func->to_string = &ft_itoa_sp;
-    func->multiply = &multiply;
-    func->destructor = &destructor;
-
-}
-
 void init_uintd(uintd *data)
 {
     data->capacity = 0;
@@ -181,4 +177,19 @@ void init_uintd(uintd *data)
     data->str = 0;
     data->str_cap = 0;
     data->value = 0;
+}
+
+void init_uintd_function(uintd_function *func)
+{
+    if(sizeof(unsigned long long) * 0.5 < sizeof(unsigned int))
+		MAX_UINT_DIGIT = (unsigned int)(sizeof(unsigned long long)*8*0.3*0.5);
+	else
+		MAX_UINT_DIGIT = (unsigned int)(sizeof(unsigned int)*8*0.3);
+	MAX_UINT_LIMIT = ft_recursive_power(10,MAX_UINT_DIGIT);
+
+	func->init = &init_uintd;
+    func->from_string = &ft_atoi_sp;
+    func->to_string = &ft_itoa_sp;
+    func->multiply = &multiply;
+    func->destructor = &destructor;
 }

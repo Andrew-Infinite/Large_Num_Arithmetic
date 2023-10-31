@@ -1,5 +1,5 @@
-#ifndef DYNUINT_H
-# define DYNUINT_H
+#ifndef UINTD_H
+# define UINTD_H
 
 typedef struct uintd
 {
@@ -11,14 +11,15 @@ typedef struct uintd
     char *str;
 } uintd;
 
-typedef struct uintd_func
+typedef struct uintd_function
 {
-    void (*atoi_sp)(uintd *output,char *str);
-    void (*to_string)(uintd *output);
-    void (*multiply)(uintd *nbr1, uintd *nbr2);
+    void (*init)(uintd *);
+    void (*from_string)(uintd *,char *);
+    void (*to_string)(uintd *);
+    //uintd *(*copy)(uintd *);
+    void (*multiply)(uintd *, uintd *);
     void (*destructor)(uintd *);
-} uintd_func;
+} uintd_function;
 
-void init_uintd(uintd *data);
-void init_uintd_func(uintd_func *func);
+void init_uintd_function(uintd_function *func);
 #endif

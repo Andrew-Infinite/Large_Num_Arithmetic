@@ -7,15 +7,21 @@ int main (int argc, char *argv[])
 	if(sizeof(unsigned long long) == 1 || argc != 3)
 		return -1;
 
-	uintd_func func;
-    init_uintd_func(&func);
+	uintd_function uintd_func;
+    init_uintd_function(&uintd_func);
 
-    uintd my_num;
-    init_uintd(&my_num);
+    uintd num;
+    uintd_func.init(&num);
 
-    func.atoi_sp(&my_num,argv[1]);
-    func.to_string(&my_num);
+    uintd num2;
+    uintd_func.init(&num2);
 
-    printf("%s \n",my_num.str);
+    uintd_func.from_string(&num,argv[1]);
+    uintd_func.from_string(&num2,argv[2]);
+
+    uintd_func.multiply(&num,&num2);
+
+    uintd_func.to_string(&num);
+    printf("%s \n",num.str);
 	return 0;
 }
