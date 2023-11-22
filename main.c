@@ -23,5 +23,8 @@ int main (int argc, char *argv[])
 
     uintd_func.to_string(&num);
     printf("%s \n",num.str);
+
+    uintd_func.destructor(&num);
+    uintd_func.destructor(&num2);
 	return 0;
 }
