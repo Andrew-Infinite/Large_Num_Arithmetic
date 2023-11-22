@@ -2,6 +2,7 @@
 # define _UINTD_H
 
 #include "../uintd.h"
+#include <stdio.h>
 
 unsigned int MAX_UINT_DIGIT;
 unsigned int MAX_UINT_LIMIT;

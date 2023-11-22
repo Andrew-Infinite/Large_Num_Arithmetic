@@ -90,11 +90,10 @@ void multiply(uintd *nbr1, uintd *nbr2)
 			output[i+j] = (unsigned int)(temp % (MAX_UINT_LIMIT));
 			carry = (unsigned int)(temp / (MAX_UINT_LIMIT));
 		}
+		output[i+nbr1->size]+=carry;
+		carry=0;
 	}
-	if(carry != 0)
-	{
-		output[size - 1] = carry;
-	}
+
 	while(output[size - 1] == 0)
 		size--;
 
@@ -104,5 +103,3 @@ void multiply(uintd *nbr1, uintd *nbr2)
 	nbr1->size = size;
 	nbr1->num_digits = num_len(nbr1);
 }
-
-
